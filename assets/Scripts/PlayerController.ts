@@ -1,8 +1,10 @@
-import { _decorator, Component, Node, input, Input, EventMouse, Vec3 } from 'cc';
+import { _decorator, Component, Node, input, Input, EventMouse, Vec3, Animation } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlayerController')
 export class PlayerController extends Component {
+    @property(Animation) cocosAnim : Animation | null = null;
+
     private _startJump: boolean = false;
     private _jumpStep: number = 0;
     private _currentJumpTime: number = 0;
@@ -11,7 +13,6 @@ export class PlayerController extends Component {
     private _currentPos: Vec3 = new Vec3(0, 0, 0);
     private _targetPos: Vec3 = new Vec3(0, 0, 0);
     private _deltaPos: Vec3 = new Vec3(0, 0, 0);
-    private _isMoving: boolean = false;
 
     start() {
         input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this);
@@ -33,6 +34,10 @@ export class PlayerController extends Component {
         this._currentJumpSpeed = this._jumpStep / this._jumpTime;
         this._currentJumpTime = 0;
         Vec3.add(this._targetPos, this._currentPos, new Vec3(this._jumpStep, 0, 0));
+        if (this.cocosAnim) {
+            this.cocosAnim.getState("cocos_anim_jump").speed = 3.5;
+            this.cocosAnim.play("cocos_anim_jump");
+        }
     }
 
     // onMouseDown(event: EventMouse)
@@ -41,7 +46,7 @@ export class PlayerController extends Component {
     // }
 
     update(deltaTime: number) {
-        if (this._startJump){
+        if (this._startJump) {
             this._currentJumpTime += deltaTime;
             if (this._currentJumpTime > this._jumpTime) {
                 this.node.setPosition(this._targetPos);
