@@ -18,14 +18,46 @@ export class GameManager extends Component {
     @property(Prefab)
     cloudPrefab: Prefab = null;
     @property roadLength: number = 50;
+    @property roadWidth: number = 3;
     @property(PlayerController) playerControl: PlayerController = null;
     @property(Node) startMenu: Node;
 
     private _road = [];
-    private currentState: GameState = GameState.GS_INIT;
+    private _currentState: GameState = GameState.GS_INIT;
+
+    set currentState(state: GameState) {
+        switch (state) {
+            case GameState.GS_INIT:
+                this.generateRoad();
+                this.playerControl.setInputActive(false);
+                this.startMenu.active = true;
+                this._currentState = GameState.GS_INIT;
+                break;
+            case GameState.GS_PLAYING:
+                setTimeout(() => {
+                    this.playerControl.setInputActive(true);
+                }, 0.2);
+                this.startMenu.active = false;
+                this._currentState = GameState.GS_PLAYING;
+                break;
+            case GameState.GS_END:
+                this.playerControl.setInputActive(false);
+                this._currentState = GameState.GS_END;
+                break;
+            default:
+                this.generateRoad();
+                break;
+        }
+    }
+
+    get currentState() {
+        return this._currentState;
+    }
+
+
 
     start() {
-        this.generateRoad();
+        this.currentState = GameState.GS_INIT;
     }
 
     generateRoad() {
@@ -44,7 +76,7 @@ export class GameManager extends Component {
 
             if (child) {
                 this.node.addChild(child);
-                child.setPosition(i, 0, 0);
+                child.setPosition(i * this.roadWidth, 0, 0);
             }
         }
     }
@@ -66,6 +98,10 @@ export class GameManager extends Component {
 
     update(deltaTime: number) {
 
+    }
+
+    onStartButtonClick() {
+        this.currentState = GameState.GS_PLAYING;
     }
 }
 

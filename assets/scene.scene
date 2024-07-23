@@ -35,7 +35,7 @@
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 58
+      "__id__": 59
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -66,7 +66,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 61
+      "__id__": 62
     },
     "_id": "030b738e-dd7c-4df9-b9c2-20e03284d683"
   },
@@ -716,6 +716,7 @@
       "__expectedType__": "cc.Prefab"
     },
     "roadLength": 50,
+    "roadWidth": 1.5,
     "playerControl": {
       "__id__": 20
     },
@@ -749,13 +750,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 55
-      },
-      {
         "__id__": 56
       },
       {
         "__id__": 57
+      },
+      {
+        "__id__": 58
       }
     ],
     "_prefab": null,
@@ -1567,7 +1568,11 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "clickEvents": [],
+    "clickEvents": [
+      {
+        "__id__": 55
+      }
+    ],
     "_interactable": true,
     "_transition": 2,
     "_normalColor": {
@@ -1620,6 +1625,16 @@
       "__id__": 48
     },
     "_id": "70R6aZfChOFp8ihKfrNr02"
+  },
+  {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 30
+    },
+    "component": "",
+    "_componentId": "f124ddcflRCDr/ZYryrYwCH",
+    "handler": "onStartButtonClick",
+    "customEventData": ""
   },
   {
     "__type__": "cc.UITransform",
@@ -1711,7 +1726,7 @@
     "instance": null,
     "targetOverrides": [
       {
-        "__id__": 59
+        "__id__": 60
       }
     ],
     "nestedPrefabInstanceRoots": [
@@ -1733,7 +1748,7 @@
       "__id__": 8
     },
     "targetInfo": {
-      "__id__": 60
+      "__id__": 61
     }
   },
   {
@@ -1745,25 +1760,25 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 62
-    },
-    "shadows": {
       "__id__": 63
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 64
     },
-    "fog": {
+    "_skybox": {
       "__id__": 65
     },
-    "octree": {
+    "fog": {
       "__id__": 66
     },
-    "skin": {
+    "octree": {
       "__id__": 67
     },
-    "lightProbeInfo": {
+    "skin": {
       "__id__": 68
+    },
+    "lightProbeInfo": {
+      "__id__": 69
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false
