@@ -18,7 +18,6 @@ export class GameManager extends Component {
     @property(Prefab)
     cloudPrefab: Prefab = null;
     @property roadLength: number = 50;
-    @property roadWidth: number = 3;
     @property(PlayerController) playerControl: PlayerController = null;
     @property(Node) startMenu: Node;
 
@@ -62,8 +61,8 @@ export class GameManager extends Component {
 
     generateRoad() {
         this._road.push(BlockType.BT_STONE);
-        for (let i = 0; i < this.roadLength; i++) {
-            if (this._road[i] == BlockType.BT_NONE) {
+        for (let i = 1; i < this.roadLength; i++) {
+            if (this._road[i - 1] == BlockType.BT_NONE) {
                 this._road.push(BlockType.BT_STONE);
             }
             else {
@@ -76,7 +75,7 @@ export class GameManager extends Component {
 
             if (child) {
                 this.node.addChild(child);
-                child.setPosition(i * this.roadWidth, 0, 0);
+                child.setPosition(i, 0, 0);
             }
         }
     }
