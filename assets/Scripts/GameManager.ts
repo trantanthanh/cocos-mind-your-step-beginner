@@ -1,4 +1,5 @@
 import { _decorator, Component, instantiate, Node, Prefab } from 'cc';
+import { PlayerController } from './PlayerController';
 const { ccclass, property } = _decorator;
 
 enum BlockType {
@@ -6,13 +7,22 @@ enum BlockType {
     BT_STONE
 }
 
+enum GameState {
+    GS_INIT,
+    GS_PLAYING,
+    GS_END
+}
+
 @ccclass('GameManager')
 export class GameManager extends Component {
     @property(Prefab)
     cloudPrefab: Prefab = null;
     @property roadLength: number = 50;
+    @property(PlayerController) playerControl: PlayerController = null;
+    @property(Node) startMenu: Node;
 
     private _road = [];
+    private currentState: GameState = GameState.GS_INIT;
 
     start() {
         this.generateRoad();

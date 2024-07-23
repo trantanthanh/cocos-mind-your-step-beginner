@@ -3,7 +3,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('PlayerController')
 export class PlayerController extends Component {
-    @property(Animation) cocosAnim : Animation | null = null;
+    @property(Animation) cocosAnim: Animation | null = null;
 
     private _startJump: boolean = false;
     private _jumpStep: number = 0;
@@ -15,7 +15,16 @@ export class PlayerController extends Component {
     private _deltaPos: Vec3 = new Vec3(0, 0, 0);
 
     start() {
-        input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this);
+
+    }
+
+    setInputActive(active: boolean) {
+        if (active) {
+            input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this);
+        }
+        else {
+            input.off(Input.EventType.MOUSE_UP, this.onMouseUp, this);
+        }
         // input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
     }
 
