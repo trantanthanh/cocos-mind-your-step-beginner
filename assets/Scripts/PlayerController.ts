@@ -13,6 +13,7 @@ export class PlayerController extends Component {
     private _currentPos: Vec3 = new Vec3(0, 0, 0);
     private _targetPos: Vec3 = new Vec3(0, 0, 0);
     private _deltaPos: Vec3 = new Vec3(0, 0, 0);
+    private _currentMoveIndex : number =  0;
 
     start() {
 
@@ -42,11 +43,17 @@ export class PlayerController extends Component {
         this._jumpStep = step;
         this._currentJumpSpeed = this._jumpStep / this._jumpTime;
         this._currentJumpTime = 0;
+	this.node.getPosition(this._currentPos);
         Vec3.add(this._targetPos, this._currentPos, new Vec3(this._jumpStep, 0, 0));
         if (this.cocosAnim) {
             this.cocosAnim.getState("cocos_anim_jump").speed = 3.5;
             this.cocosAnim.play("cocos_anim_jump");
         }
+        this._currentMoveIndex += step;
+    }
+
+    Reset() {
+        this._currentMoveIndex = 0;
     }
 
     // onMouseDown(event: EventMouse)
@@ -54,11 +61,21 @@ export class PlayerController extends Component {
 
     // }
 
+    onOnceJumpEnd() {
+        if (this.cocosAnim) {
+            this.cocosAnim.play('cocos_anim_idle');
+        }
+
+        this.node.emit('JumpEnd', this._currentMoveIndex);
+    }
+
+
     update(deltaTime: number) {
         if (this._startJump) {
             this._currentJumpTime += deltaTime;
             if (this._currentJumpTime > this._jumpTime) {
                 this.node.setPosition(this._targetPos);
+                this.onOnceJumpEnd();
                 this._startJump = false;
             }
             else {

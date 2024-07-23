@@ -576,9 +576,9 @@
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": -0.019,
-      "y": 0.256,
-      "z": 0.07
+      "x": 0,
+      "y": 0,
+      "z": 0
     }
   },
   {
@@ -716,7 +716,6 @@
       "__expectedType__": "cc.Prefab"
     },
     "roadLength": 50,
-    "roadWidth": 1.5,
     "playerControl": {
       "__id__": 20
     },

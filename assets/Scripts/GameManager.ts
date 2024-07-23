@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Node, Prefab } from 'cc';
+import { _decorator, Component, instantiate, Node, Prefab, Vec3 } from 'cc';
 import { PlayerController } from './PlayerController';
 const { ccclass, property } = _decorator;
 
@@ -27,10 +27,7 @@ export class GameManager extends Component {
     set currentState(state: GameState) {
         switch (state) {
             case GameState.GS_INIT:
-                this.generateRoad();
-                this.playerControl.setInputActive(false);
-                this.startMenu.active = true;
-                this._currentState = GameState.GS_INIT;
+                this.Init();
                 break;
             case GameState.GS_PLAYING:
                 setTimeout(() => {
@@ -43,9 +40,22 @@ export class GameManager extends Component {
                 this.playerControl.setInputActive(false);
                 this._currentState = GameState.GS_END;
                 break;
-            default:
-                this.generateRoad();
-                break;
+        }
+    }
+
+    private Init() {
+        if (this.startMenu) {
+            this.startMenu.active = true;
+        }
+        this._currentState = GameState.GS_INIT;
+
+
+        this.generateRoad();
+
+        if (this.playerControl) {
+            this.playerControl.setInputActive(false);
+            this.playerControl.node.setPosition(Vec3.ZERO);
+            this.playerControl.Reset();
         }
     }
 
@@ -57,12 +67,33 @@ export class GameManager extends Component {
 
     start() {
         this.currentState = GameState.GS_INIT;
+        this.playerControl.node.on("JumpEnd", this.onPlayerJumpEnd, this);
+    }
+
+    checkResult(moveIndex: number) {
+        if (moveIndex < this.roadLength) {
+            if (this._road[moveIndex] == BlockType.BT_NONE) {
+                this.currentState = GameState.GS_INIT;
+            }
+        }
+        else {
+            this.currentState = GameState.GS_INIT;
+        }
+    }
+
+    onPlayerJumpEnd(moveIndex: number) {
+        this.checkResult(moveIndex);
     }
 
     generateRoad() {
+        this.node.removeAllChildren();
+
+        this._road = [];
+        // startPos
         this._road.push(BlockType.BT_STONE);
+
         for (let i = 1; i < this.roadLength; i++) {
-            if (this._road[i - 1] == BlockType.BT_NONE) {
+            if (this._road[i-1] === BlockType.BT_NONE) {
                 this._road.push(BlockType.BT_STONE);
             }
             else {
