@@ -8,12 +8,12 @@ export class PlayerController extends Component {
     private _startJump: boolean = false;
     private _jumpStep: number = 0;
     private _currentJumpTime: number = 0;
-    private _jumpTime: number = 0.1;
+    private _jumpTime: number = 1;
     private _currentJumpSpeed: number = 0;
     private _currentPos: Vec3 = new Vec3(0, 0, 0);
     private _targetPos: Vec3 = new Vec3(0, 0, 0);
     private _deltaPos: Vec3 = new Vec3(0, 0, 0);
-    private _currentMoveIndex : number =  0;
+    private _currentMoveIndex: number = 0;
 
     start() {
 
@@ -43,10 +43,10 @@ export class PlayerController extends Component {
         this._jumpStep = step;
         this._currentJumpSpeed = this._jumpStep / this._jumpTime;
         this._currentJumpTime = 0;
-	this.node.getPosition(this._currentPos);
+        this.node.getPosition(this._currentPos);
         Vec3.add(this._targetPos, this._currentPos, new Vec3(this._jumpStep, 0, 0));
         if (this.cocosAnim) {
-            this.cocosAnim.getState("cocos_anim_jump").speed = 3.5;
+            // this.cocosAnim.getState("cocos_anim_jump").speed = 3.5;
             this.cocosAnim.play("cocos_anim_jump");
         }
         this._currentMoveIndex += step;
