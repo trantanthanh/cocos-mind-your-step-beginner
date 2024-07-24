@@ -109,14 +109,14 @@ export class GameManager extends Component {
     }
 
     checkResult(moveIndex: number) {
-        if (moveIndex < this.roadLength) {
+        if (moveIndex < this.roadLength - 1) {
             if (this._road[moveIndex] == BlockType.BT_NONE) {
                 this.scoreLabel.string = moveIndex.toString();
                 this.currentState = GameState.GS_END_REVIVE;
             }
         }
         else {
-            this.currentState = GameState.GS_INIT;
+            this.currentState = GameState.GS_END;
         }
     }
 
