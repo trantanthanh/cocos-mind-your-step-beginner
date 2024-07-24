@@ -41,6 +41,7 @@ export class GameManager extends Component {
                 this._currentState = GameState.GS_PLAYING;
                 break;
             case GameState.GS_END_REVIVE:
+                this.playerControl.setInputActive(false);
                 this.startMenu.active = false;
                 this.resultMenu.active = true;
                 this._currentState = GameState.GS_END_REVIVE;
