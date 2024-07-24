@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Node, Prefab, Vec3 } from 'cc';
+import { _decorator, Component, instantiate, Label, Node, Prefab, Vec3 } from 'cc';
 import { PlayerController } from './PlayerController';
 const { ccclass, property } = _decorator;
 
@@ -10,6 +10,7 @@ enum BlockType {
 enum GameState {
     GS_INIT,
     GS_PLAYING,
+    GS_END_REVIVE,
     GS_END
 }
 
@@ -20,6 +21,8 @@ export class GameManager extends Component {
     @property roadLength: number = 50;
     @property(PlayerController) playerControl: PlayerController = null;
     @property(Node) startMenu: Node;
+    @property(Node) resultMenu: Node;
+    @property(Label) scoreLabel: Label;
 
     private _road = [];
     private _currentState: GameState = GameState.GS_INIT;
@@ -34,7 +37,13 @@ export class GameManager extends Component {
                     this.playerControl.setInputActive(true);
                 }, 0.2);
                 this.startMenu.active = false;
+                this.resultMenu.active = false;
                 this._currentState = GameState.GS_PLAYING;
+                break;
+            case GameState.GS_END_REVIVE:
+                this.startMenu.active = false;
+                this.resultMenu.active = true;
+                this._currentState = GameState.GS_END_REVIVE;
                 break;
             case GameState.GS_END:
                 this.playerControl.setInputActive(false);
@@ -44,8 +53,12 @@ export class GameManager extends Component {
     }
 
     private Init() {
+        this.scoreLabel.string = "0";
         if (this.startMenu) {
             this.startMenu.active = true;
+        }
+        if (this.resultMenu){
+            this.resultMenu.active = false;
         }
         this._currentState = GameState.GS_INIT;
 
@@ -57,6 +70,30 @@ export class GameManager extends Component {
             this.playerControl.node.setPosition(Vec3.ZERO);
             this.playerControl.Reset();
         }
+    }
+
+    private NextLevel()
+    {
+        if (this.startMenu) {
+            this.startMenu.active = false;
+        }
+        if (this.resultMenu){
+            this.resultMenu.active = false;
+        }
+        this._currentState = GameState.GS_PLAYING;
+
+
+        this.generateRoad();
+
+        if (this.playerControl) {
+            this.playerControl.setInputActive(true);
+            this.playerControl.node.setPosition(Vec3.ZERO);
+            this.playerControl.Reset();
+        }
+    }
+
+    revive() {
+        
     }
 
     get currentState() {
@@ -73,7 +110,8 @@ export class GameManager extends Component {
     checkResult(moveIndex: number) {
         if (moveIndex < this.roadLength) {
             if (this._road[moveIndex] == BlockType.BT_NONE) {
-                this.currentState = GameState.GS_INIT;
+                this.scoreLabel.string = moveIndex.toString();
+                this.currentState = GameState.GS_END_REVIVE;
             }
         }
         else {
@@ -93,7 +131,7 @@ export class GameManager extends Component {
         this._road.push(BlockType.BT_STONE);
 
         for (let i = 1; i < this.roadLength; i++) {
-            if (this._road[i-1] === BlockType.BT_NONE) {
+            if (this._road[i - 1] === BlockType.BT_NONE) {
                 this._road.push(BlockType.BT_STONE);
             }
             else {
